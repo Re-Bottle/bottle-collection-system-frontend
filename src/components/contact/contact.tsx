@@ -1,6 +1,3 @@
 export default function Contact() {
-    return (
-        <section id='contact'>
-        </section>
-    )
+  return <section id="contact"></section>;
 }

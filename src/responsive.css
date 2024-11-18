@@ -1,0 +1,44 @@
+@media(max-width: 768px) {
+    .hero img {
+        max-width: 100%;
+        height: auto;
+        margin-top: 2rem;
+    }
+
+    .card {
+        margin: 1rem;
+    }
+
+    .display-4 {
+        font-size: 2.5rem;
+    }
+
+    .lead {
+        font-size: 1.1rem;
+    }
+
+    .btn-lg {
+        width: auto;
+        margin-bottom: 1rem;
+    }
+}
+
+@media (min-width: 768px) and (max-width: 1024px) {
+    .hero img {
+        max-width: 100%;
+    }
+
+    .card {
+        margin: 2rem;
+    }
+
+    .display-4 {
+        font-size: 2.8rem;
+    }
+}
+
+@media (min-width: 1025px) {
+    .card {
+        margin: 2rem;
+    }
+}
