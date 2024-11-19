@@ -20,7 +20,7 @@ export default function Navbar() {
                             <li className="nav-item">
                                 <a className="nav-link" style={{
                                     cursor: 'pointer',
-                                }} aria-current="page" onClick={() => { navigate('#about') }}>About</a>
+                                }} aria-current="page" onClick={() => { navigate('/#about') }}>About</a>
                             </li>
                             <li className="nav-item">
                                 <a className="nav-link" style={{
@@ -33,6 +33,14 @@ export default function Navbar() {
                                 }} onClick={() => { navigate('/#contact') }}>Contact us</a>
                             </li>
                         </ul>
+                        <div className="d-flex">
+                            <Link to="/login">
+                                <button className="btn btn-primary me-2">Login</button>
+                            </Link>
+                            <Link to="/register">
+                                <button className="btn btn-secondary">Register</button>
+                            </Link>
+                        </div>
                     </div>
                 </div>
             </nav>

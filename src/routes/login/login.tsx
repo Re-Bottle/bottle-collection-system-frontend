@@ -13,6 +13,14 @@ export default function Login() {
 
     return (
         <>
+            {/* Back Button */}
+            <button
+                className="btn btn-light position-absolute top-0 start-0 m-3"
+                onClick={() => navigate('/')}
+                style={{ zIndex: 10 }}
+            >
+                <i className="bi bi-arrow-left text-success"></i>
+            </button>
             <div className="d-flex flex-column-reverse flex-md-row" style={{ minHeight: '100vh' }}>
                 <div className="col-md-6 d-flex justify-content-center align-items-center p-4">
                     <div className="card bg-success rounded-6 shadow-lg w-100">
