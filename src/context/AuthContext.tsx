@@ -1,10 +1,11 @@
 import React, { createContext, useState, useContext, ReactNode } from 'react';
+import { User } from '../types/user';
 
 // Define the shape of our authentication context state
 interface AuthContextType {
+    user: User | null;
     isAuthenticated: boolean;
-    email: string | null;
-    login: (user: { id: string, email: string }) => void;
+    login: (userData: { id: string, email: string, name: string }) => void;
     logout: () => void;
 }
 
@@ -15,22 +16,22 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
 
-    const [email, setEmail] = useState<string | null>(null);
+    const [user, setUser] = useState<User | null>(null);
 
     // A simple email/password check (in a real app, this would be an API call)
-    const login = (user: { id: string, email: string },) => {
+    const login = (userData: { id: string, email: string, name: string },) => {
         // Dummy validation for email and password (can be replaced with API request)
         setIsAuthenticated(true);
-        setEmail(email);
+        setUser(userData);
     };
 
     const logout = () => {
         setIsAuthenticated(false);
-        setEmail(null);
+        setUser(null);
     };
 
     return (
-        <AuthContext.Provider value={{ isAuthenticated, email, login, logout }}>
+        <AuthContext.Provider value={{ isAuthenticated, user, login, logout }}>
             {children}
         </AuthContext.Provider>
     );

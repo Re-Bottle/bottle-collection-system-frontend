@@ -46,13 +46,14 @@ export default function Login(token: any) {
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ username: email, password })
+                body: JSON.stringify({ email, password })
             })
                 .then(response => response.json())
                 .then(data => {
                     if (data.id) {
+
                         login({
-                            email: data.email, id: data.id
+                            email: data.email, id: data.id, name: data.name
                         });
                     } else {
                         alert(data.message);
