@@ -1,6 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from "react-router-dom";
-import image from "../../assets/images/Sign Up.png";
+import image from "../../assets/images/sign-up.png";
+import { confirmPasswordValidation, emailValidation, nameValidation, passwordValidation } from '../../util/validation';
+import { useAuth } from '../../context/AuthContext';
+
 
 export default function Register() {
     const [firstName, setFirstName] = useState<string>('');
@@ -8,11 +11,88 @@ export default function Register() {
     const [email, setEmail] = useState<string>('');
     const [password, setPassword] = useState<string>('');
     const [confirmPassword, setConfirmPassword] = useState<string>('');
+    const [error, setError] = useState<string>('');
+    const { login, isAuthenticated } = useAuth();
+
     const navigate = useNavigate();
 
-    const onSubmit = () => {
-        // Handle the form submission
+    // Helper function to validate the form
+    const validateForm = () => {
+        // Reset errors first
+        setError('');
+
+        const nameValidationResult = nameValidation(firstName, lastName)
+        // Check first and last name
+        if (!nameValidationResult.result) {
+            setError(nameValidationResult.message);
+            return false;
+        }
+
+        const emailValidationResult = emailValidation(email)
+        // Check email format
+        if (!emailValidationResult.result) {
+            setError(emailValidationResult.message);
+            return false;
+        }
+
+        const passwordValidationResult = passwordValidation(password)
+        // Password validation: Check length, case, digit, and special character
+        if (!passwordValidationResult.result) {
+            setError(passwordValidationResult.message);
+            return false;
+        }
+
+        const confirmPasswordValidationResult = confirmPasswordValidation(password, confirmPassword)
+        // Check if passwords match
+        if (!confirmPasswordValidationResult.result) {
+            setError(confirmPasswordValidationResult.message);
+            return false;
+        }
+
+        return true;
     }
+
+    // Handle form submission
+    const onSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+
+        if (validateForm()) {
+
+            fetch('http://localhost:3000/auth/signup', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ username: email, password })
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        return Promise.reject('Failed to submit, please try again.');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.user) {
+                        // login({ email: data.user.email, id: data.user.id });
+                        navigate('/login', { state: { account_created: true } });
+
+                    } else {
+                        alert(data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error during fetch:', error);
+                    alert(error);
+                });
+        }
+    };
+    useEffect(() => {
+        if (isAuthenticated) {
+            navigate('/dashboard');
+        }
+    }, [isAuthenticated])
+
+
 
     return (
         <>
@@ -29,7 +109,9 @@ export default function Register() {
                 <div className="col-md-6 d-flex justify-content-center align-items-center p-4">
                     <div className="card bg-success rounded-6 shadow-lg w-100">
                         <h1 className="lead text-center text-light m-3 card-title">Register</h1>
-                        <form className="px-4 py-3">
+                        <form className="px-4 py-3" onSubmit={onSubmit}>
+                            {error && <div className="alert alert-danger">{error}</div>}
+
                             <div className="form-group">
                                 <label htmlFor="firstName" className="text-light">First Name</label>
                                 <input
@@ -38,7 +120,7 @@ export default function Register() {
                                     id="firstName"
                                     placeholder="Enter your first name"
                                     value={firstName}
-                                    onChange={(e) => { setFirstName(e.target.value) }}
+                                    onChange={(e) => setFirstName(e.target.value)}
                                     required
                                 />
                             </div>
@@ -50,7 +132,7 @@ export default function Register() {
                                     id="lastName"
                                     placeholder="Enter your last name"
                                     value={lastName}
-                                    onChange={(e) => { setLastName(e.target.value) }}
+                                    onChange={(e) => setLastName(e.target.value)}
                                     required
                                 />
                             </div>
@@ -62,7 +144,7 @@ export default function Register() {
                                     id="email"
                                     placeholder="Enter your email"
                                     value={email}
-                                    onChange={(e) => { setEmail(e.target.value) }}
+                                    onChange={(e) => setEmail(e.target.value)}
                                     required
                                 />
                             </div>
@@ -74,7 +156,7 @@ export default function Register() {
                                     id="password"
                                     placeholder="Create a password"
                                     value={password}
-                                    onChange={(e) => { setPassword(e.target.value) }}
+                                    onChange={(e) => setPassword(e.target.value)}
                                     required
                                 />
                             </div>
@@ -86,14 +168,18 @@ export default function Register() {
                                     id="confirmPassword"
                                     placeholder="Confirm your password"
                                     value={confirmPassword}
-                                    onChange={(e) => { setConfirmPassword(e.target.value) }}
+                                    onChange={(e) => setConfirmPassword(e.target.value)}
                                     required
                                 />
                             </div>
+
+                            <div className="d-flex justify-content-center">
+                                <button className="btn btn-light text-success btn-block m-4" type="submit">
+                                    Sign Up
+                                </button>
+                            </div>
                         </form>
-                        <div className="d-flex justify-content-center">
-                            <button className="btn btn-light text-success btn-block m-4" onClick={onSubmit}>Sign Up</button>
-                        </div>
+
                         <div className="d-flex justify-content-center text-light">
                             <p onClick={() => navigate("/login")} style={{ cursor: 'pointer' }}>Have an account? Login</p>
                         </div>
@@ -101,7 +187,7 @@ export default function Register() {
                 </div>
 
                 <div className="col-md-6 d-flex justify-content-center align-items-center">
-                    <img src={image} alt="loading image" className="img rounded" />
+                    <img src={image} alt="sign up" className="img rounded" />
                 </div>
             </div>
         </>

@@ -1,18 +1,87 @@
-import React, { useState } from 'react';
-import { useNavigate } from "react-router-dom";
-import image from "../../assets/images/Sign In.png"
+import React, { useEffect, useState } from 'react';
+import { useLocation, useNavigate } from "react-router-dom";
+import image from "../../assets/images/sign-in.png"
+import { useAuth } from '../../context/AuthContext';
+import { emailValidation, passwordValidation } from '../../util/validation';
 
 
-export default function Login() {
+export default function Login(token: any) {
     const [email, setEmail] = useState<string>('');
     const [password, setPassword] = useState<string>('');
     const navigate = useNavigate();
-    const onSubmit = () => {
+    const [error, setError] = useState<string>('');
+    const { login, isAuthenticated } = useAuth();
 
+    // const [showLoginDialog, setShowLoginDialog] = useState<boolean>(false)
+    const accountCreated = useLocation()?.state?.account_created
+
+    // Helper function to validate the form
+    const validateForm = () => {
+        // Reset errors first
+        setError('');
+
+        const emailValidationResult = emailValidation(email)
+        // Check email format
+        if (!emailValidationResult.result) {
+            setError(emailValidationResult.message);
+            return false;
+        }
+
+        const passwordValidationResult = passwordValidation(password)
+        // Password validation: Check length, case, digit, and special character
+        if (!passwordValidationResult.result) {
+            setError(passwordValidationResult.message);
+            return false;
+        }
+
+        return true;
     }
+
+    const onSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+
+        if (validateForm()) {
+            fetch('http://localhost:3000/auth/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ username: email, password })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.id) {
+                        login({
+                            email: data.email, id: data.id
+                        });
+                    } else {
+                        alert(data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error during fetch:', error);
+                    alert(error);
+                });
+        }
+    }
+
+    useEffect(() => {
+
+        if (accountCreated) {
+            alert("Account Created successfully! login to continue.")
+            // setShowLoginDialog(true)
+        }
+    }, [])
+
+    useEffect(() => {
+        if (isAuthenticated) {
+            navigate('/dashboard');
+        }
+    }, [isAuthenticated])
 
     return (
         <>
+
             {/* Back Button */}
             <button
                 className="btn btn-light position-absolute top-0 start-0 m-3"

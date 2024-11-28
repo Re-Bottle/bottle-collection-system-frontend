@@ -10,8 +10,8 @@ export default function Home() {
             <Hero />
             <About />
             <AppDownload />
-            <Footer />
             <Contact />
+            <Footer />
         </>
     )
 } 

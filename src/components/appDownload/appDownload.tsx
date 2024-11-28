@@ -1,4 +1,4 @@
-import phone_image from '../../assets/images/app-download-morph.svg';
+import phone_image from '../../assets/images/app-download-morph.png';
 import google_play_image from '../../assets/images/google-play.png';
 
 export default function AppDownload() {

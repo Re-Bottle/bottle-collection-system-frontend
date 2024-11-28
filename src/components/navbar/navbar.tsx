@@ -1,16 +1,17 @@
 import { Link, Outlet, useNavigate } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext';
 
 export default function Navbar() {
     const navigate = useNavigate();
-
+    const { isAuthenticated } = useAuth();
     return (
         <>
             <nav className="navbar navbar-expand-lg text-success bg-light">
                 <div className="container">
-                    <a className="navbar-brand" style={{
+                    <a className="navbar-brand h1" style={{
                         cursor: 'pointer',
                     }} onClick={() => { navigate('/') }}>
-                        {/* <img src={image} alt="logo" className="d-inline-block align-text-top" /> */}
+                        Re-Bottle
                     </a>
                     <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                         <span className="navbar-toggler-icon"></span>
@@ -34,11 +35,10 @@ export default function Navbar() {
                             </li>
                         </ul>
                         <div className="d-flex">
-                            <Link to="/login">
-                                <button className="btn btn-primary me-2">Login</button>
-                            </Link>
-                            <Link to="/register">
-                                <button className="btn btn-secondary">Register</button>
+                            <Link className="btn btn-success me-2" to={isAuthenticated ? '/dashboard' : '/login'}>
+                                {
+                                    isAuthenticated ? 'Dashboard' : 'Login'
+                                }
                             </Link>
                         </div>
                     </div>
