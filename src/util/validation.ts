@@ -50,7 +50,7 @@ export const passwordValidation = (password: string): validationResult => {
 }
 
 export const confirmPasswordValidation = (password: string, confirmPassword: string): validationResult => {
-    if (!(password == confirmPassword)) {
+    if (!(password === confirmPassword)) {
         return {
             message: "Passwords do not match.",
             result: false

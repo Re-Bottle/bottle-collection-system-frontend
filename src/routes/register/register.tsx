@@ -12,7 +12,7 @@ export default function Register() {
     const [password, setPassword] = useState<string>('');
     const [confirmPassword, setConfirmPassword] = useState<string>('');
     const [error, setError] = useState<string>('');
-    const { login, isAuthenticated } = useAuth();
+    const { isAuthenticated } = useAuth();
 
     const navigate = useNavigate();
 
@@ -90,7 +90,7 @@ export default function Register() {
         if (isAuthenticated) {
             navigate('/dashboard');
         }
-    }, [isAuthenticated])
+    }, [isAuthenticated, navigate])
 
 
 

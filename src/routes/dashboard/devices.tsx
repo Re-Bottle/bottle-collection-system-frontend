@@ -1,3 +1,4 @@
+import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField } from "@mui/material";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -23,32 +24,27 @@ type Device = {
     status: string;
 };
 
-const LoadingIndicator = () => (
-    <div className="loading-indicator">
-        <span>Loading...</span>
-    </div>
-);
+
 
 export default function Devices() {
+    const [deviceID, setDeviceID] = useState<string>('');
+    const [deviceName, setDeviceName] = useState<string>('');
     const [location, setLocation] = useState<string>('');
-    const [binCode, setBinCode] = useState<string>('');
-    const [isLoading, setIsLoading] = useState<boolean>(false);
-    const [isSuccess, setIsSuccess] = useState<boolean>(false);
+    const [description, setDescription] = useState<string>('');
     const navigate = useNavigate();
+    const [open, setOpen] = useState<boolean>(false);
 
-    const handleAddDeviceSubmit = async (event: React.FormEvent) => {
-        event.preventDefault();
-
-        // Start loading
-        setIsLoading(true);
-        setIsSuccess(false);
-
-        // Simulate a delay for loading (like an API call or processing)
-        setTimeout(() => {
-            setIsLoading(false);
-            setIsSuccess(true); // Simulate success
-        }, 3000); // 3 seconds delay
+    const handleClickOpen = () => {
+        setOpen(true);
     };
+
+    const handleClose = () => {
+        setOpen(false);
+    };
+
+    const handleAddDeviceSubmit = () => {
+
+    }
 
     return (
         <section
@@ -66,13 +62,81 @@ export default function Devices() {
             <div className="container flex-grow-1 d-flex flex-column">
                 <div className="d-flex justify-content-between mb-4">
                     <h1 className="text-success">Devices</h1>
-                    <button
-                        className="btn btn-success"
-                        data-toggle="modal"
-                        data-target="#addDeviceModal"
-                    >
+                    <Button variant="outlined" color="success" size="large" onClick={handleClickOpen}>
                         Add Device +
-                    </button>
+                    </Button>
+                    <Dialog
+                        open={open}
+                        onClose={handleClose}
+                        PaperProps={{
+                            component: 'form',
+                            onSubmit: (event: React.FormEvent<HTMLFormElement>) => {
+                                event.preventDefault();
+                                const formData = new FormData(event.currentTarget);
+                                const formJson = Object.fromEntries((formData as any).entries());
+                                const email = formJson.email;
+                                console.log(email);
+                                handleClose();
+                            },
+                        }}
+                    >
+                        <DialogTitle align="center" color="success">Add device</DialogTitle>
+                        <DialogContent>
+                            <DialogContentText align="center">
+                                Add the details about the device to connect.
+                            </DialogContentText>
+                            <TextField
+                                autoFocus
+                                required
+                                margin="dense"
+                                id={deviceID}
+                                name={deviceID}
+                                label="Device ID"
+                                type="email"
+                                fullWidth
+                                variant="standard"
+                                color="success"
+                            />
+                            <TextField
+                                required
+                                margin="dense"
+                                id="name"
+                                name="string"
+                                label="Device Name"
+                                type="email"
+                                fullWidth
+                                variant="standard"
+                                color="success"
+                            />
+                            <TextField
+                                required
+                                margin="dense"
+                                id="name"
+                                name="string"
+                                label="Location"
+                                type="email"
+                                fullWidth
+                                variant="standard"
+                                color="success"
+                            />
+                            <TextField
+                                margin="dense"
+                                id="name"
+                                name="string"
+                                label="Description"
+                                type="email"
+                                fullWidth
+                                variant="standard"
+                                color="success"
+                            />
+
+                        </DialogContent>
+                        <DialogActions>
+                            <Button color="success" onClick={handleClose}>Cancel</Button>
+                            <Button color="success" onClick={handleAddDeviceSubmit} type="submit" variant="contained">Add</Button>
+                        </DialogActions>
+                    </Dialog>
+
                 </div>
                 <div className="card bg-success shadow-lg p-4 flex-grow-1">
                     <div className="row align-items-center">
@@ -90,66 +154,7 @@ export default function Devices() {
                 </div>
             </div>
 
-            {/* Bootstrap Modal */}
-            <div
-                className="modal fade"
-                id="addDeviceModal"
-                tabIndex={-1}
-                aria-labelledby="addDeviceModalLabel"
-                aria-hidden="true"
-            >
-                <div className="modal-dialog">
-                    <div className="modal-content">
-                        <div className="modal-header">
-                            <h5 className="modal-title" id="addDeviceModalLabel">
-                                Enter Location and Bin Code
-                            </h5>
-                            <button
-                                type="button"
-                                className="close"
-                                data-dismiss="modal"
-                                aria-label="Close"
-                            >
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div className="modal-body">
-                            <form onSubmit={handleAddDeviceSubmit}>
-                                <div>
-                                    <label>Location:</label>
-                                    <input
-                                        type="text"
-                                        value={location}
-                                        onChange={(e) => setLocation(e.target.value)}
-                                        className="form-control"
-                                        required
-                                    />
-                                </div>
-                                <div>
-                                    <label>Bin Code:</label>
-                                    <input
-                                        type="text"
-                                        value={binCode}
-                                        onChange={(e) => setBinCode(e.target.value)}
-                                        className="form-control"
-                                        required
-                                    />
-                                </div>
-                                <button type="submit" className="btn btn-primary" disabled={isLoading}>
-                                    Submit
-                                </button>
-                            </form>
 
-                            {isLoading && <LoadingIndicator />} {/* Show loading indicator when loading */}
-                            {isSuccess && !isLoading && (
-                                <div className="success-message mt-3">
-                                    Device found!
-                                </div>
-                            )}
-                        </div>
-                    </div>
-                </div>
-            </div>
         </section>
     );
 }

@@ -11,7 +11,7 @@ export default function Dashboard() {
         if (!isAuthenticated) {
             navigate('/login');
         }
-    }, [isAuthenticated])
+    }, [isAuthenticated, navigate])
     return (
         <div className="d-flex">
             {/* Sidebar - Make it fixed */}

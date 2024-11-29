@@ -22,7 +22,7 @@ export default function AppDownload() {
                         </div>
 
                         <div className="col-12 col-md-4 d-flex justify-content-center">
-                            <img src={phone_image} alt="App morph image" className="img-fluid rounded" />
+                            <img src={phone_image} alt="App morph" className="img-fluid rounded" />
                         </div>
                     </div>
                 </div>

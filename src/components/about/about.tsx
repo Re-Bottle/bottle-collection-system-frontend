@@ -39,7 +39,7 @@ export default function About() {
                 <div className="d-flex justify-content-center mb-3 p-3">
                   <img
                     src={item.image}
-                    alt={`process ${index + 1} image`}
+                    alt={`process ${index + 1}`}
                     className="img-fluid rounded"
                     style={{
                       maxHeight: "200px",

@@ -67,18 +67,18 @@ export default function Login(token: any) {
     }
 
     useEffect(() => {
-
         if (accountCreated) {
             alert("Account Created successfully! login to continue.")
             // setShowLoginDialog(true)
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     useEffect(() => {
         if (isAuthenticated) {
             navigate('/dashboard');
         }
-    }, [isAuthenticated])
+    }, [isAuthenticated, navigate])
 
     return (
         <>
@@ -118,7 +118,7 @@ export default function Login(token: any) {
                 </div>
 
                 <div className="col-md-6 d-flex justify-content-center align-items-center">
-                    <img src={image} alt="loading image" className="img rounded" />
+                    <img src={image} alt="loading" className="img rounded" />
                 </div>
             </div>
         </>

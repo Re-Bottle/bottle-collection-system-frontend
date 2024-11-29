@@ -1,37 +1,34 @@
-import { Link, Outlet, useNavigate } from 'react-router-dom';
+import { Link, Outlet } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 
 export default function Navbar() {
-    const navigate = useNavigate();
     const { isAuthenticated } = useAuth();
     return (
         <>
             <nav className="navbar navbar-expand-lg text-success bg-light">
                 <div className="container">
-                    <a className="navbar-brand h1" style={{
-                        cursor: 'pointer',
-                    }} onClick={() => { navigate('/') }}>
+                    <Link className="navbar-brand h1" to={'/'}>
                         Re-Bottle
-                    </a>
+                    </Link>
                     <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                         <span className="navbar-toggler-icon"></span>
                     </button>
                     <div className="collapse navbar-collapse" id="navbarNav">
                         <ul className="navbar-nav ms-auto" >
                             <li className="nav-item">
-                                <a className="nav-link" style={{
-                                    cursor: 'pointer',
-                                }} aria-current="page" onClick={() => { navigate('/#about') }}>About</a>
+                                <Link className="nav-link" to={'/#about'}>
+                                    About
+                                </Link>
                             </li>
                             <li className="nav-item">
-                                <a className="nav-link" style={{
-                                    cursor: 'pointer',
-                                }} onClick={() => { navigate('/#appDownload') }}>Download app</a>
+                                <Link className="nav-link" to={'#appDownload'}>
+                                    Download app
+                                </Link>
                             </li>
                             <li className="nav-item">
-                                <a className="nav-link " style={{
-                                    cursor: 'pointer',
-                                }} onClick={() => { navigate('/#contact') }}>Contact us</a>
+                                <Link className="nav-link" to={'#contact'}>
+                                    Contact us
+                                </Link>
                             </li>
                         </ul>
                         <div className="d-flex">

@@ -14,9 +14,13 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 // Create a provider component
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-    const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+    const [isAuthenticated, setIsAuthenticated] = useState<boolean>(true);
 
-    const [user, setUser] = useState<User | null>(null);
+    const [user, setUser] = useState<User | null>({
+        name: 'string',
+        email: 'string',
+        id: 'string'
+    });
 
     // A simple email/password check (in a real app, this would be an API call)
     const login = (userData: { id: string, email: string, name: string },) => {

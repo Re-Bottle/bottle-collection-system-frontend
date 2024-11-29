@@ -27,7 +27,7 @@ export default function Hero() {
               <div className="col-md-5">
                 <img
                   src={hero_image}
-                  alt="Hero image"
+                  alt="Hero"
                   className="img-fluid rounded"
                 />
               </div>
