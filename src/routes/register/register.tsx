@@ -58,10 +58,11 @@ export default function Register() {
 
         if (validateForm()) {
 
-            fetch('http://localhost:3000/auth/signup', {
+            fetch('http://localhost:3000/auth/signupVendor', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+
                 },
                 body: JSON.stringify({ email, password, name: firstName + " " + lastName })
             })

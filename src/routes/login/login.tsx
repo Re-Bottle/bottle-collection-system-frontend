@@ -41,12 +41,13 @@ export default function Login(token: any) {
         e.preventDefault();
 
         if (validateForm()) {
-            fetch('http://localhost:3000/auth/login', {
+            fetch('http://localhost:3000/auth/loginVendor', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ email, password })
+                body: JSON.stringify({ email, password }),
+                credentials: 'include'
             })
                 .then(response => response.json())
                 .then(data => {

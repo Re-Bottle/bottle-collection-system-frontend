@@ -62,6 +62,19 @@ export const confirmPasswordValidation = (password: string, confirmPassword: str
     }
 }
 
+export const deviceValidation = (device: string): validationResult => {
+    if (!device) {
+        return {
+            message: "Please select a device.",
+            result: false
+        }
+    }
+    return {
+        message: "",
+        result: true
+    }
+}
+
 
 interface validationResult {
     result: boolean,

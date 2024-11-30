@@ -26,6 +26,7 @@ function App() {
           <Route path="targets" element={<Targets />} />
           <Route path="notifications" element={<Dashboard />} />
         </Route>
+        {/* <Route path='*' exact={true} component={My404Component} /> */}
       </Routes>
     </AuthProvider>
   );
