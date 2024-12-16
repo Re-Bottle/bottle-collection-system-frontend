@@ -9,6 +9,7 @@ import Dashboard from './routes/dashboard/dashboard';
 import Devices from './routes/dashboard/devices';
 import { AuthProvider } from './context/AuthContext';
 import Targets from './routes/dashboard/targets';
+import DeviceScreen from './routes/dashboard/deviceScreen';
 
 
 
@@ -25,6 +26,7 @@ function App() {
           <Route index element={<Devices />} />
           <Route path="targets" element={<Targets />} />
           <Route path="notifications" element={<Dashboard />} />
+          <Route path="device/:deviceId" element={<DeviceScreen />} />
         </Route>
         {/* <Route path='*' exact={true} component={My404Component} /> */}
       </Routes>

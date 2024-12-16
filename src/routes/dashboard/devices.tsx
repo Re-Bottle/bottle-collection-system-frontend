@@ -43,22 +43,26 @@ export default function Devices() {
     const [deviceName, setDeviceName] = useState<string>('');
     const [deviceLocation, setDeviceLocation] = useState<string>('');
     const [deviceDescription, setDescription] = useState<string>('');
-    const [open, setOpen] = useState<boolean>(false);
+    const [openAddDeviceDialog, setOpenAddDeviceDialog] = useState<boolean>(false);
+    const [openSuccessDialog, setOpenSuccessDialog] = useState<boolean>(false);
+    const [openFailureDialog, setOpenFailureDialog] = useState<boolean>(false);
 
 
     const navigate = useNavigate();
     const { user } = useAuth();
 
 
+    const handleClickOpenAddDeviceDialog = () => setOpenAddDeviceDialog(true);
+    const handleCloseAddDeviceDialog = () => setOpenAddDeviceDialog(false);
+
+    const handleOpenSuccessDialog = () => setOpenSuccessDialog(true);
+    const handleCloseSuccessDialog = () => setOpenSuccessDialog(false);
+
+    const handleOpenFailureDialog = () => setOpenFailureDialog(true);
+    const handleCloseFailureDialog = () => setOpenFailureDialog(false);
 
 
-    const handleClickOpen = () => {
-        setOpen(true);
-    };
 
-    const handleClose = () => {
-        setOpen(false);
-    };
 
     const handleAddDeviceSubmit = () => {
         fetch('http://localhost:3000/device/claimDevice', {
@@ -76,11 +80,12 @@ export default function Devices() {
             credentials: 'include',
         }).then(response => {
             if (response.ok) {
+                handleOpenSuccessDialog();
                 return response.json();
             }
             return Promise.reject(response);
         })
-            .then(data => {
+            .then(() => {
                 setDevices([...devices, {
                     deviceId,
                     deviceName,
@@ -94,6 +99,7 @@ export default function Devices() {
                 }])
             })
             .catch((error) => {
+                handleOpenFailureDialog();
                 console.error('Error:', error);
             })
     }
@@ -115,12 +121,10 @@ export default function Devices() {
             return Promise.reject(response);
         })
             .then(data => {
-                // TODO: show dialog for successful device claim
                 setDevices(data.devices);
             })
 
             .catch((error) => {
-                // TODO: show dialog for fail device claim
                 console.error('Error:', error);
             })
     }, []);
@@ -141,17 +145,17 @@ export default function Devices() {
             <div className="container flex-grow-1 d-flex flex-column">
                 <div className="d-flex justify-content-between mb-4">
                     <h1 className="text-success">Devices</h1>
-                    <Button variant="outlined" color="success" size="large" onClick={handleClickOpen}>
+                    <Button variant="outlined" color="success" size="large" onClick={handleClickOpenAddDeviceDialog}>
                         Add Device +
                     </Button>
                     <Dialog
-                        open={open}
-                        onClose={handleClose}
+                        open={openAddDeviceDialog}
+                        onClose={handleCloseAddDeviceDialog}
                         PaperProps={{
                             component: 'form',
                             onSubmit: (event: React.FormEvent<HTMLFormElement>) => {
                                 event.preventDefault();
-                                handleClose();
+                                handleCloseAddDeviceDialog();
                             },
                         }}
                     >
@@ -211,8 +215,46 @@ export default function Devices() {
 
                         </DialogContent>
                         <DialogActions>
-                            <Button color="success" onClick={handleClose}>Cancel</Button>
+                            <Button color="success" onClick={handleCloseAddDeviceDialog}>Cancel</Button>
                             <Button color="success" onClick={handleAddDeviceSubmit} type="submit" variant="contained">Add</Button>
+                        </DialogActions>
+                    </Dialog>
+
+                    {/* Success dialog */}
+                    <Dialog
+                        open={openSuccessDialog}
+                        onClose={handleCloseSuccessDialog}
+                        aria-labelledby="alert-dialog-title"
+                        aria-describedby="alert-dialog-description" >
+                        <DialogTitle id="alert-dialog-title">
+                            {"Device Claimed Successfully"}
+                        </DialogTitle>
+                        <DialogContent>
+                            <DialogContentText id="alert-dialog-description">
+                                The device has been claimed successfully. You can now view the device in the devices section.
+                            </DialogContentText>
+                        </DialogContent>
+                        <DialogActions>
+                            <Button onClick={handleCloseSuccessDialog} autoFocus>Ok</Button>
+                        </DialogActions>
+                    </Dialog>
+
+                    {/* Failure dialog */}
+                    <Dialog
+                        open={openFailureDialog}
+                        onClose={handleCloseFailureDialog}
+                        aria-labelledby="alert-dialog-title"
+                        aria-describedby="alert-dialog-description" >
+                        <DialogTitle id="alert-dialog-title">
+                            {"Error"}
+                        </DialogTitle>
+                        <DialogContent>
+                            <DialogContentText id="alert-dialog-description">
+                                There was an error claiming the device. Please try again later.
+                            </DialogContentText>
+                        </DialogContent>
+                        <DialogActions>
+                            <Button onClick={handleCloseFailureDialog} autoFocus>Ok</Button>
                         </DialogActions>
                     </Dialog>
 
@@ -238,7 +280,12 @@ export default function Devices() {
                                                     <p className="card-text text-secondary">{device.deviceLocation}</p>
                                                     <p className="card-text text-secondary">Fill Level: {device.deviceFillLevel}%</p>
                                                     <p className="card-text text-secondary">{device.deviceDescription}</p>
-                                                    <button className="btn btn-success">View</button>
+                                                    <button
+                                                        className="btn btn-success"
+                                                        onClick={() => navigate(`/dashboard/device/${device.deviceId}`)} // Navigate to device details page
+                                                    >
+                                                        View
+                                                    </button>
                                                 </div>
                                             </div>
                                         </div>
@@ -250,7 +297,12 @@ export default function Devices() {
                                                     <p className="card-text text-light">{device.deviceLocation}</p>
                                                     <p className="card-text text-light">Fill Level: {device.deviceFillLevel}%</p>
                                                     <p className="card-text text-light ">{device.deviceDescription}</p>
-                                                    <button className="btn btn-success">View</button>
+                                                    <button
+                                                        className="btn btn-success"
+                                                        onClick={() => navigate(`/dashboard/device/${device.deviceId}`)} // Navigate to device details page
+                                                    >
+                                                        View
+                                                    </button>
                                                 </div>
                                             </div>
                                         </div>

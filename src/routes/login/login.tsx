@@ -1,16 +1,28 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from "react-router-dom";
-import image from "../../assets/images/sign-in.png"
+import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from "@mui/material";
 import { useAuth } from '../../context/AuthContext';
 import { emailValidation, passwordValidation } from '../../util/validation';
+import image from "../../assets/images/sign-in.png"
 
 
 export default function Login(token: any) {
+    const navigate = useNavigate();
     const [email, setEmail] = useState<string>('');
     const [password, setPassword] = useState<string>('');
-    const navigate = useNavigate();
     const [error, setError] = useState<string>('');
     const { login, isAuthenticated } = useAuth();
+    const [open, setOpen] = useState<boolean>(false);
+    const [dialogMessage, setDialogMessage] = useState<string>('');
+    const [dialogTitle, setDialogTitle] = useState<string>('');
+
+    const handleOpen = (message: string, title: string) => {
+        setDialogMessage(message);
+        setDialogTitle(title);
+        setOpen(true);
+    }
+    const handleClose = () => setOpen(false);
+
 
     // const [showLoginDialog, setShowLoginDialog] = useState<boolean>(false)
     const accountCreated = useLocation()?.state?.account_created
@@ -57,19 +69,19 @@ export default function Login(token: any) {
                             email: data.email, id: data.id, name: data.name
                         });
                     } else {
-                        alert(data.message);
+                        handleOpen(data.message, "Login Error");
                     }
                 })
                 .catch(error => {
                     console.error('Error during fetch:', error);
-                    alert(error);
+                    handleOpen(error.toString(), "Network Error");
                 });
         }
     }
 
     useEffect(() => {
         if (accountCreated) {
-            alert("Account Created successfully! login to continue.")
+            handleOpen("Account Created successfully! login to continue.", "Account Created")
             // setShowLoginDialog(true)
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -83,6 +95,29 @@ export default function Login(token: any) {
 
     return (
         <>
+            <Dialog
+                open={open}
+                onClose={handleClose}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+                sx={{
+                    '& .MuiDialog-paper': {
+                        width: 400,  // Set the width to 400px (adjust as needed)
+                        maxWidth: 'none',  // Ensure it doesn't stretch wider than the width you set
+                    }
+                }}
+            >
+                <DialogTitle id="alert-dialog-title">
+                    {dialogTitle}
+                </DialogTitle>
+                <DialogContent>
+                    <DialogContentText id="alert-dialog-description">
+                        {dialogMessage} </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleClose} autoFocus>Ok</Button>
+                </DialogActions>
+            </Dialog>
 
             {/* Back Button */}
             <button
@@ -110,6 +145,7 @@ export default function Login(token: any) {
                         </form>
                         <div className="d-flex justify-content-center">
                             <button className="btn btn-light text-success btn-block m-4" onClick={onSubmit}>Login</button>
+                            {error && <div className="alert alert-danger">{error}</div>}
                         </div>
                         <div className="d-flex justify-content-center text-light">
                             <p onClick={() => navigate("/register")} style={{ cursor: 'pointer' }}>Don't have an account? Sign up</p>

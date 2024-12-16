@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import image from "../../assets/images/sign-up.png";
 import { confirmPasswordValidation, emailValidation, nameValidation, passwordValidation } from '../../util/validation';
 import { useAuth } from '../../context/AuthContext';
+import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from "@mui/material";
 
 
 export default function Register() {
@@ -13,6 +14,16 @@ export default function Register() {
     const [confirmPassword, setConfirmPassword] = useState<string>('');
     const [error, setError] = useState<string>('');
     const { isAuthenticated } = useAuth();
+    const [open, setOpen] = useState<boolean>(false);
+    const [dialogMessage, setDialogMessage] = useState<string>('');
+    const [dialogTitle, setDialogTitle] = useState<string>('');
+
+    const handleOpen = (message: string, title: string) => {
+        setDialogMessage(message);
+        setDialogTitle(title);
+        setOpen(true);
+    }
+    const handleClose = () => setOpen(false);
 
     const navigate = useNavigate();
 
@@ -78,12 +89,11 @@ export default function Register() {
                         navigate('/login', { state: { account_created: true } });
 
                     } else {
-                        alert(data.message);
+                        handleOpen(data.message, "Warning");
                     }
                 })
                 .catch(error => {
-                    console.error('Error during fetch:', error);
-                    alert(error);
+                    handleOpen(error, "Error");
                 });
         }
     };
@@ -97,6 +107,29 @@ export default function Register() {
 
     return (
         <>
+            <Dialog
+                open={open}
+                onClose={handleClose}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+                sx={{
+                    '& .MuiDialog-paper': {
+                        width: 400,  // Set the width to 400px (adjust as needed)
+                        maxWidth: 'none',  // Ensure it doesn't stretch wider than the width you set
+                    }
+                }}
+            >
+                <DialogTitle id="alert-dialog-title">
+                    {dialogTitle}
+                </DialogTitle>
+                <DialogContent>
+                    <DialogContentText id="alert-dialog-description">
+                        {dialogMessage} </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleClose} autoFocus>Ok</Button>
+                </DialogActions>
+            </Dialog>
             {/* Back Button */}
             <button
                 className="btn btn-light position-absolute top-0 start-0 m-3"
