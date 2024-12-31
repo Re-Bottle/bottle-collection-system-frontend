@@ -73,28 +73,20 @@ export default function Register() {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-
                 },
                 body: JSON.stringify({ email, password, name: firstName + " " + lastName })
             })
-                .then(response => {
-                    if (!response.ok) {
-                        return Promise.reject('Failed to submit, please try again.');
-                    }
-                    return response.json();
-                })
+                .then(response => (response.ok)? response.json():Promise.reject(response))
                 .then(data => {
                     if (data.user) {
-                        // login({ email: data.user.email, id: data.user.id });
                         navigate('/login', { state: { account_created: true } });
-
                     } else {
                         handleOpen(data.message, "Warning");
                     }
                 })
-                .catch(error => {
-                    handleOpen(error, "Error");
-                });
+                .catch(error => error.json())
+                .then(data => handleOpen(data.message, "Error"));
+                
         }
     };
     useEffect(() => {
