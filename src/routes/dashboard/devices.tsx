@@ -72,7 +72,7 @@ export default function Devices() {
       },
       body: JSON.stringify({
         vendorId: user?.id,
-        deviceId: deviceId,
+        id: deviceId,
         deviceName: deviceName,
         deviceLocation: deviceLocation,
         deviceDescription: deviceDescription,
