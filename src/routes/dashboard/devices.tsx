@@ -43,7 +43,7 @@ export interface Device {
 export default function Devices() {
   const [devices, setDevices] = useState<Device[]>([]);
 
-  const [deviceId, setDeviceID] = useState<string>("");
+  const [id, setId] = useState<string>("");
   const [deviceName, setDeviceName] = useState<string>("");
   const [deviceLocation, setDeviceLocation] = useState<string>("");
   const [deviceDescription, setDescription] = useState<string>("");
@@ -72,7 +72,7 @@ export default function Devices() {
       },
       body: JSON.stringify({
         vendorId: user?.id,
-        id: deviceId,
+        id: id,
         deviceName: deviceName,
         deviceLocation: deviceLocation,
         deviceDescription: deviceDescription,
@@ -90,7 +90,7 @@ export default function Devices() {
         setDevices([
           ...devices,
           {
-            deviceId,
+            id,
             deviceName,
             deviceLocation,
             deviceFillLevel: 0,
@@ -180,14 +180,14 @@ export default function Devices() {
                 autoFocus
                 required
                 margin="dense"
-                id="deviceID"
+                id="id"
                 label="Device ID"
                 type="text"
                 fullWidth
                 variant="standard"
                 color="success"
-                value={deviceId}
-                onChange={(e) => setDeviceID(e.target.value)}
+                value={id}
+                onChange={(e) => setId(e.target.value)}
               />
               <TextField
                 required
@@ -300,7 +300,7 @@ export default function Devices() {
                 device.deviceActiveStatus ? (
                   <div
                     className="col-12 col-md-6 col-lg-4 mb-4"
-                    key={device.deviceId}
+                    key={device.id}
                   >
                     <div className="card bg-light  shadow-sm">
                       <div className="card-body">
@@ -319,7 +319,7 @@ export default function Devices() {
                         <button
                           className="btn btn-success"
                           onClick={() => {
-                            navigate(`/dashboard/device/${device.deviceId}`, {
+                            navigate(`/dashboard/device/${device.id}`, {
                               state: { device },
                             });
                           }} // Navigate to device details page
@@ -332,7 +332,7 @@ export default function Devices() {
                 ) : (
                   <div
                     className="col-12 col-md-6 col-lg-4 mb-4"
-                    key={device.deviceId}
+                    key={device.id}
                   >
                     <div className="card bg-dark bg-gradient shadow-sm ">
                       <div className="card-body">
@@ -351,7 +351,7 @@ export default function Devices() {
                         <button
                           className="btn btn-success"
                           onClick={() => {
-                            navigate(`/dashboard/device/${device.deviceId}`, {
+                            navigate(`/dashboard/device/${device.id}`, {
                               state: { device },
                             });
                           }} // Navigate to device details page
