@@ -1,11 +1,65 @@
 import { useNavigate, useLocation } from "react-router-dom";
-import { Button, Divider, LinearProgress, Stack } from "@mui/material";
+import {
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  Divider,
+  TextField,
+} from "@mui/material";
 import { Device } from "../../types/user";
+import { useState } from "react";
 
 export default function DeviceScreen() {
+  const [openEditDeviceDialog, setOpenEditDeviceDialog] =
+    useState<boolean>(false);
+  const [openDeleteDeviceDialog, setOpenDeleteDeviceDialog] =
+    useState<boolean>(false);
+
+  const [deviceName, setDeviceName] = useState<string>("");
+  const [deviceLocation, setDeviceLocation] = useState<string>("");
+  const [deviceDescription, setDescription] = useState<string>("");
+  const [openSuccessDialog, setOpenSuccessDialog] = useState<boolean>(false);
+  const [openFailureDialog, setOpenFailureDialog] = useState<boolean>(false);
+
   const { state } = useLocation();
   const device: Device = state.device;
   const navigate = useNavigate();
+
+  const handleClickOpenEditDeviceDialog = () => setOpenEditDeviceDialog(true);
+  const handleCloseEditDeviceDialog = () => setOpenEditDeviceDialog(false);
+  const handleClickOpenDeleteDeviceDialog = () =>
+    setOpenDeleteDeviceDialog(true);
+  const handleCloseDeleteDeviceDialog = () => setOpenDeleteDeviceDialog(false);
+
+  const handleOpenSuccessDialog = () => setOpenSuccessDialog(true);
+  const handleCloseSuccessDialog = () => {
+    setOpenSuccessDialog(false);
+    navigate("/dashboard");
+  };
+  const handleOpenFailureDialog = () => setOpenFailureDialog(true);
+  const handleCloseFailureDialog = () => setOpenFailureDialog(false);
+
+  const handleDeleteDeviceSubmit = () => {
+    fetch("http://localhost:3000/device/deleteDevice", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ id: device.id }),
+      credentials: "include",
+    })
+      .then((response) => {
+        if (response.ok) {
+          handleOpenSuccessDialog();
+          return response.json();
+        }
+        return Promise.reject(response);
+      })
+      .catch(() => handleOpenFailureDialog());
+  };
 
   return (
     <section
@@ -61,7 +115,7 @@ export default function DeviceScreen() {
           <Button
             variant="contained"
             color="success"
-            onClick={() => console.log("Edit device")}
+            onClick={handleClickOpenEditDeviceDialog}
           >
             <i className="bi bi-pencil me-3"></i>
             Edit Device
@@ -70,7 +124,7 @@ export default function DeviceScreen() {
           <Button
             variant="contained"
             color="error"
-            onClick={() => console.log("Delete device")}
+            onClick={handleClickOpenDeleteDeviceDialog}
           >
             <i className="bi bi-trash me-3"></i>
             Delete Device
@@ -94,6 +148,157 @@ export default function DeviceScreen() {
             Report Issue
           </Button>
         </div>
+
+        <Dialog
+          open={openEditDeviceDialog}
+          onClose={handleCloseEditDeviceDialog}
+          PaperProps={{
+            component: "form",
+            onSubmit: (event: React.FormEvent<HTMLFormElement>) => {
+              event.preventDefault();
+              handleCloseEditDeviceDialog();
+            },
+          }}
+        >
+          <DialogTitle align="center" color="success">
+            Edit device
+          </DialogTitle>
+          <DialogContent>
+            <DialogContentText align="center">
+              Edit the device details.
+            </DialogContentText>
+            <TextField
+              required
+              margin="dense"
+              id="deviceName"
+              label="Device Name"
+              type="text"
+              fullWidth
+              variant="standard"
+              color="success"
+              value={deviceName}
+              onChange={(e) => setDeviceName(e.target.value)}
+            />
+            <TextField
+              required
+              margin="dense"
+              id="location"
+              label="Location"
+              type="text"
+              fullWidth
+              variant="standard"
+              color="success"
+              value={deviceLocation}
+              onChange={(e) => setDeviceLocation(e.target.value)}
+            />
+            <TextField
+              margin="dense"
+              id="description"
+              label="Description"
+              type="text"
+              fullWidth
+              variant="standard"
+              color="success"
+              value={deviceDescription}
+              onChange={(e) => setDescription(e.target.value)}
+            />
+          </DialogContent>
+          <DialogActions>
+            <Button color="success" onClick={handleCloseEditDeviceDialog}>
+              Cancel
+            </Button>
+            <Button
+              color="success"
+              onClick={() => console.log("meow")}
+              type="submit"
+              variant="contained"
+            >
+              Edit
+            </Button>
+          </DialogActions>
+        </Dialog>
+
+        <Dialog
+          open={openDeleteDeviceDialog}
+          onClose={handleCloseDeleteDeviceDialog}
+          PaperProps={{
+            component: "form",
+            onSubmit: (event: React.FormEvent<HTMLFormElement>) => {
+              event.preventDefault();
+              handleCloseDeleteDeviceDialog();
+            },
+          }}
+        >
+          <DialogTitle align="center" color="success">
+            Delete device
+          </DialogTitle>
+          <DialogContent>
+            <DialogContentText align="center">
+              Are you sure you want to delete this device?
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button color="success" onClick={handleCloseDeleteDeviceDialog}>
+              Cancel
+            </Button>
+            <Button
+              color="success"
+              onClick={handleDeleteDeviceSubmit}
+              type="submit"
+              variant="contained"
+            >
+              Delete
+            </Button>
+          </DialogActions>
+        </Dialog>
+
+        {/* Success dialog */}
+        <Dialog
+          open={openSuccessDialog}
+          onClose={handleCloseSuccessDialog}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+        >
+          <DialogTitle id="alert-dialog-title">
+            {"Device Claimed Successfully"}
+          </DialogTitle>
+          <DialogContent>
+            <DialogContentText id="alert-dialog-description">
+              The device has been Deleted successfully.
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button
+              color="success"
+              type="submit"
+              variant="contained"
+              onClick={handleCloseSuccessDialog}
+              autoFocus
+            >
+              Ok
+            </Button>
+          </DialogActions>
+        </Dialog>
+
+        {/* Failure dialog */}
+        <Dialog
+          open={openFailureDialog}
+          onClose={handleCloseFailureDialog}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+        >
+          <DialogTitle id="alert-dialog-title">{"Error"}</DialogTitle>
+          <DialogContent>
+            <DialogContentText id="alert-dialog-description">
+              There was an error deleting the device. Please try again later.
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleCloseFailureDialog} autoFocus>
+              Ok
+            </Button>
+          </DialogActions>
+        </Dialog>
       </div>
     </section>
   );
