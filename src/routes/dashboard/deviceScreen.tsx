@@ -23,6 +23,9 @@ export default function DeviceScreen() {
   const [deviceDescription, setDescription] = useState<string>("");
   const [openSuccessDialog, setOpenSuccessDialog] = useState<boolean>(false);
   const [openFailureDialog, setOpenFailureDialog] = useState<boolean>(false);
+  const [successTitle, setSuccessTitle] = useState<string>("");
+  const [successMessage, setSuccessMessage] = useState<string>("");
+  const [failureMessage, setFailureMessage] = useState<string>("");
 
   const { state } = useLocation();
   const device: Device = state.device;
@@ -53,12 +56,48 @@ export default function DeviceScreen() {
     })
       .then((response) => {
         if (response.ok) {
+          handleCloseDeleteDeviceDialog();
+          setSuccessTitle("Success");
+          setSuccessMessage("Device deleted successfully.");
           handleOpenSuccessDialog();
           return response.json();
         }
         return Promise.reject(response);
       })
-      .catch(() => handleOpenFailureDialog());
+      .catch(() => {
+        setFailureMessage("Failed to delete device.");
+        handleOpenFailureDialog();
+      });
+  };
+
+  const handleEditDeviceSubmit = () => {
+    fetch("http://localhost:3000/device/editDevice", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        id: device.id,
+        deviceName: deviceName,
+        deviceLocation: deviceLocation,
+        deviceDescription: deviceDescription,
+      }),
+      credentials: "include",
+    })
+      .then((response) => {
+        if (response.ok) {
+          setSuccessTitle("Success");
+          setSuccessMessage("Device edited successfully.");
+          handleCloseEditDeviceDialog();
+          handleOpenSuccessDialog();
+          return response.json();
+        }
+        return Promise.reject(response);
+      })
+      .catch(() => {
+        setFailureMessage("Failed to edit device.");
+        handleOpenFailureDialog();
+      });
   };
 
   return (
@@ -80,7 +119,7 @@ export default function DeviceScreen() {
             <div className="row align-items-center mb-3">
               <h1 className="text-success fs-1">{device.deviceName}</h1>
               <div className="d-flex align-items-center">
-                <h2> {device.id}</h2>
+                <p className="text-success fs-5"> {device.id}</p>
                 <div
                   className={`badge ${
                     device.deviceActiveStatus ? "bg-success" : "bg-danger"
@@ -209,7 +248,7 @@ export default function DeviceScreen() {
             </Button>
             <Button
               color="success"
-              onClick={() => console.log("meow")}
+              onClick={handleEditDeviceSubmit}
               type="submit"
               variant="contained"
             >
@@ -259,12 +298,10 @@ export default function DeviceScreen() {
           aria-labelledby="alert-dialog-title"
           aria-describedby="alert-dialog-description"
         >
-          <DialogTitle id="alert-dialog-title">
-            {"Device Claimed Successfully"}
-          </DialogTitle>
+          <DialogTitle id="alert-dialog-title">{successTitle}</DialogTitle>
           <DialogContent>
             <DialogContentText id="alert-dialog-description">
-              The device has been Deleted successfully.
+              {successMessage}
             </DialogContentText>
           </DialogContent>
           <DialogActions>
@@ -290,7 +327,7 @@ export default function DeviceScreen() {
           <DialogTitle id="alert-dialog-title">{"Error"}</DialogTitle>
           <DialogContent>
             <DialogContentText id="alert-dialog-description">
-              There was an error deleting the device. Please try again later.
+              {failureMessage}
             </DialogContentText>
           </DialogContent>
           <DialogActions>
