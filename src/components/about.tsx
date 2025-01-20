@@ -1,6 +1,6 @@
-import image1 from "../../assets/images/about-process-1.svg";
-import image2 from "../../assets/images/about-process-2.svg";
-import image3 from "../../assets/images/about-process-3.svg";
+import image1 from "../assets/images/about-process-1.svg";
+import image2 from "../assets/images/about-process-2.svg";
+import image3 from "../assets/images/about-process-3.svg";
 
 const items = [
   {

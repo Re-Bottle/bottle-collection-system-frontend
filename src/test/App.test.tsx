@@ -1,20 +1,19 @@
-import React from 'react';
-import { cleanup, render, screen } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
-import { act } from 'react';
-import App from '../App';
-import { MemoryRouter } from 'react-router-dom';
+import { act } from "react";
+import { MemoryRouter } from "react-router-dom";
+import { cleanup, render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+import App from "../App";
 
 afterEach(cleanup);
 
-test('website renders and required items are present in home page', () => {
-  act(()=>{
+test("website renders and required items are present in home page", () => {
+  act(() => {
     render(
-      <MemoryRouter initialEntries={['/']}>
+      <MemoryRouter initialEntries={["/"]}>
         <App />
       </MemoryRouter>
     );
-  })
+  });
 
   const linkElement = screen.getByText("Re-Bottle");
   expect(linkElement).toBeTruthy();
@@ -23,10 +22,10 @@ test('website renders and required items are present in home page', () => {
   expect(goHomeLink).toBeTruthy();
 });
 
-test('Onclick Login moves to Login page', async () => {
+test("Onclick Login moves to Login page", async () => {
   await act(async () => {
     render(
-      <MemoryRouter initialEntries={['/']}>
+      <MemoryRouter initialEntries={["/"]}>
         <App />
       </MemoryRouter>
     );
@@ -39,6 +38,8 @@ test('Onclick Login moves to Login page', async () => {
     userEvent.click(goLoginLink);
   });
 
-  const loginScreenUniqueText = screen.getByText("Don't have an account? Sign up");
+  const loginScreenUniqueText = screen.getByText(
+    "Don't have an account? Sign up"
+  );
   expect(loginScreenUniqueText).toBeTruthy();
 });

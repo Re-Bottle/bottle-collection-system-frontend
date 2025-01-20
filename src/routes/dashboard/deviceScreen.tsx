@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import {
   Button,
@@ -10,7 +11,6 @@ import {
   TextField,
 } from "@mui/material";
 import { Device } from "../../types/user";
-import { useState } from "react";
 
 export default function DeviceScreen() {
   const [openEditDeviceDialog, setOpenEditDeviceDialog] =

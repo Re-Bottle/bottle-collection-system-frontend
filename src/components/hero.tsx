@@ -1,4 +1,4 @@
-import hero_image from "../../assets/images/hero-recycle-image.png";
+import hero_image from "../assets/images/hero-recycle-image.png";
 
 export default function Hero() {
   return (

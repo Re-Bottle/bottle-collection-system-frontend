@@ -1,13 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import image from "../../assets/images/sign-up.png";
-import {
-  confirmPasswordValidation,
-  emailValidation,
-  nameValidation,
-  passwordValidation,
-} from "../../util/validation";
-import { useAuth } from "../../context/AuthContext";
 import {
   Button,
   Dialog,
@@ -16,6 +8,14 @@ import {
   DialogContentText,
   DialogTitle,
 } from "@mui/material";
+import image from "../../assets/images/sign-up.png";
+import {
+  confirmPasswordValidation,
+  emailValidation,
+  nameValidation,
+  passwordValidation,
+} from "../../util/validation";
+import { useAuth } from "../../context/AuthContext";
 
 export default function Register() {
   const [firstName, setFirstName] = useState<string>("");

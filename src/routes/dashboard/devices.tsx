@@ -1,3 +1,5 @@
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   Button,
   Dialog,
@@ -7,8 +9,6 @@ import {
   DialogTitle,
   TextField,
 } from "@mui/material";
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import placeholder_image from "../../assets/images/404-not-found.svg";
 import { useAuth } from "../../context/AuthContext";
 import { Device } from "../../types/user";
