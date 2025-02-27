@@ -1,74 +1,37 @@
-import Contactsvg from "../assets/svg/Contact.svg"
+import ContactImage from "../assets/svg/Contact.svg";
 
 export default function Contact() {
   return (
-    <section id="contact" className="container ps-3 pe-3 pb-4 pt-4">
-      <h1 className="text-success mb-5 fw-bold">Contact</h1>
-
-      <div className="row">
-        {/* Left Side - Text + Image */}
-        <div className="col-md-6 d-flex flex-column justify-content-center">
-          <p className="text-dark">
-            Need to connect with us? Either fill out the form with us or email
-            the contact you’d like to reach.
+    <section id="contact" className="container py-5">
+      <div className="row align-items-center">
+        <div className="col-md-6">
+          <h2 className="text-success fw-bold">Contact Us</h2>
+          <p className="lead mb-4">
+            Need to connect with us? Either fill out the form with us or the
+            email you'd like to contact.
           </p>
           <img
-            src={Contactsvg}
+            src={ContactImage}
             alt="Contact Illustration"
-            className="img-fluid mt-3"
-            style={{ maxWidth: "80%" }}
+            className="img-fluid"
           />
         </div>
 
-        <div className="col-md-6">
-          <div
-            className="p-4 rounded shadow"
-            style={{ backgroundColor: "#1E5631", color: "white" }}
-          >
-            <form>
-              <div className="row mb-3">
-                <div className="col">
-                  <label className="form-label">First Name</label>
-                  <input
-                    type="text"
-                    className="form-control bg-white text-dark"
-                    placeholder="First Name"
-                  />
-                </div>
-                <div className="col">
-                  <label className="form-label">Last Name</label>
-                  <input
-                    type="text"
-                    className="form-control bg-white text-dark"
-                    placeholder="Last Name"
-                  />
-                </div>
-              </div>
+        <div className="col-md-6 d-flex justify-content-end">
+          <div className="bg-light p-5 rounded w-100 shadow-lg">
+            <h4 className="text-dark fw-bold mb-4">Get in Touch</h4>
 
-              <div className="mb-3">
-                <label className="form-label">Email</label>
-                <input
-                  type="email"
-                  className="form-control bg-white text-dark"
-                  placeholder="Email"
-                />
-              </div>
+            <div className="d-flex align-items-center mb-3 p-3 bg-secondary-subtle rounded">
+              <i className="bi bi-telephone-fill text-success fs-3 me-3"></i>
+              <span className="fs-5 text-dark">+91 7619254678</span>
+            </div>
 
-              <div className="mb-3">
-                <label className="form-label">What can we help you with?</label>
-                <textarea
-                  className="form-control bg-white text-white"
-                  placeholder="Your message"
-                  rows={4}
-                ></textarea>
-              </div>
-
-              <div className="d-flex justify-content-start mt-3">
-                <button type="submit" className="btn btn-light btn-sm text-dark border-white">
-                    Submit
-                </button>
-              </div>
-            </form>
+            <div className="d-flex align-items-center p-3 bg-secondary-subtle rounded">
+              <i className="bi bi-envelope-fill text-success fs-3 me-3"></i>
+              <span className="fs-5 text-dark text-break">
+                cynthia.tchristuniversity.in
+              </span>
+            </div>
           </div>
         </div>
       </div>
