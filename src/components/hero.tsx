@@ -16,7 +16,7 @@ export default function Hero() {
                   Revolutionizing the waste management system
                 </h1>
                 <p className="lead mb-4">
-                  This is an AI-based smart waste bin, designed for public
+                  This is an ML-based smart waste bin, designed for public
                   places, enabling them to simplify recycling. It sorts and
                   compresses the waste automatically, controls the fill level
                   and processes data for convenient waste management.

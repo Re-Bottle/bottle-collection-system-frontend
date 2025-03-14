@@ -7,7 +7,7 @@ import Register from "./routes/register/register";
 import Login from "./routes/login/login";
 import Dashboard from "./routes/dashboard/dashboard";
 import Devices from "./routes/dashboard/devices";
-import Targets from "./routes/dashboard/targets";
+import Rewards from "./routes/dashboard/rewards";
 import DeviceScreen from "./routes/dashboard/deviceScreen";
 import { AuthProvider } from "./context/AuthContext";
 
@@ -22,7 +22,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/dashboard" element={<Dashboard />}>
           <Route index element={<Devices />} />
-          <Route path="targets" element={<Targets />} />
+          <Route path="rewards" element={<Rewards />} />
           <Route path="notifications" element={<Dashboard />} />
           <Route path="device/:deviceId" element={<DeviceScreen />} />
         </Route>

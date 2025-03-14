@@ -5,17 +5,19 @@ import image3 from "../assets/images/about-process-3.svg";
 const items = [
   {
     title: "Step 1",
-    description: "Visit the nearest bottle collection system.",
+    description: "Visit the nearest ReBottle Bin, Deposit your bottles.",
     image: image1,
   },
   {
     title: "Step 2",
-    description: "Visit the nearest bottle collection system.",
+    description:
+      "Wait for processing till QR code is generated for your bottles.",
     image: image2,
   },
   {
     title: "Step 3",
-    description: "Visit the nearest bottle collection system.",
+    description:
+      "Scan it with the ReBottle Mobile App to get your reward points.",
     image: image3,
   },
 ];

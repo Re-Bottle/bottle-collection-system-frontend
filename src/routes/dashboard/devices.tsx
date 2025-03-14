@@ -11,34 +11,7 @@ import {
 } from "@mui/material";
 import placeholder_image from "../../assets/images/404-not-found.svg";
 import { useAuth } from "../../context/AuthContext";
-import { Device } from "../../types/user";
-
-// const data: Device[] = [
-//     { id: "11", name: "Bin 1", location: "Kathmandu", fillLevel: 80, status: "Active", description: "This is a smart bin" },
-//     { id: "20", name: "Bin 2", location: "Lalitpur", fillLevel: 50, status: "Active", description: "" },
-//     { id: "30", name: "Bin 3", location: "Bhaktapur", fillLevel: 70, status: "Inactive", description: "" },
-//     { id: "40", name: "Bin 4", location: "Pokhara", fillLevel: 90, status: "Active", description: "" },
-//     { id: "50", name: "Bin 5", location: "Chitwan", fillLevel: 30, status: "Inactive", description: "" },
-//     { id: "60", name: "Bin 6", location: "Butwal", fillLevel: 60, status: "Inactive", description: "" },
-//     { id: "70", name: "Bin 7", location: "Dharan", fillLevel: 40, status: "Inactive", description: "" },
-//     { id: "80", name: "Bin 8", location: "Biratnagar", fillLevel: 70, status: "Active", description: "This is a smart bin that is located at the Biratnagar area" },
-//     { id: "90", name: "Bin 9", location: "Hetauda", fillLevel: 50, status: "Inactive", description: "" },
-//     { id: "10", name: "Bin 10", location: "Dhangadi", fillLevel: 80, status: "Active", description: "" },
-// ];
-
-/**
-export interface Device {
-  deviceId: string;
-  deviceName: string | null;
-  userId: string | null;
-  deviceLocation: string | null;
-  deviceFillLevel: number;
-  deviceDescription: string | null;
-  claimableStatus: boolean;
-  lastActionTimestamp: Date;
-  deviceActiveStatus: boolean;
-}
- */
+import { Device } from "../../types/device";
 
 export default function Devices() {
   const [devices, setDevices] = useState<Device[]>([]);

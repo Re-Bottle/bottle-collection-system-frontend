@@ -10,7 +10,7 @@ import {
   Divider,
   TextField,
 } from "@mui/material";
-import { Device } from "../../types/user";
+import { Device } from "../../types/device";
 
 export default function DeviceScreen() {
   const [openEditDeviceDialog, setOpenEditDeviceDialog] =

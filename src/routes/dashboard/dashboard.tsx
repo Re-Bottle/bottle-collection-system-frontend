@@ -30,10 +30,10 @@ export default function Dashboard() {
           </div>
           <div className="mb-3">
             <Link
-              to="/dashboard/targets"
+              to="/dashboard/rewards"
               className="sidebar-link text-white text-decoration-none h3"
             >
-              Targets
+              Rewards
             </Link>
           </div>
           <div className="mb-3">
