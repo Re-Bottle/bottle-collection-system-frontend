@@ -2,6 +2,7 @@ const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 const nameRegex = /^[a-zA-Z]+$/;
 const passwordRegex =
   /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{6,}$/;
+const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
 
 export const nameValidation = (
   firstName: string,

@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import {
   Button,
   Dialog,
@@ -9,8 +8,32 @@ import {
   DialogTitle,
   TextField,
 } from "@mui/material";
-import { useAuth } from "../../context/AuthContext";
-import { Reward } from "../../types/reward"; // Ensure you have Reward type
+import { Reward } from "../../types/reward";
+
+function dateValidation(redeemBy: string | null) {
+  if (!redeemBy) {
+    throw new Error("Redeem by date is required.");
+  }
+
+  const redeemByDate = new Date(redeemBy);
+  const currentDate = new Date();
+
+  // Check if the date is valid
+  if (isNaN(redeemByDate.getTime())) {
+    throw new Error("Invalid date format.");
+  }
+
+  // Check if the date is in the future
+  if (redeemByDate <= currentDate) {
+    throw new Error("Redeem by date must be in the future.");
+  }
+
+  // Check if the date is not later than the year 3000
+  const year3000 = new Date("3000-01-01");
+  if (redeemByDate > year3000) {
+    throw new Error("Redeem by date must be before the year 3000.");
+  }
+}
 
 export default function Rewards() {
   const [rewards, setRewards] = useState<Reward[]>([]);
@@ -28,8 +51,7 @@ export default function Rewards() {
     useState<boolean>(false);
   const [rewardToDelete, setRewardToDelete] = useState<Reward | null>(null);
 
-  const navigate = useNavigate();
-  const { user } = useAuth();
+  const [error, setError] = useState<string | null>(null); // New error state
 
   // Handlers for Dialogs
   const handleOpenAddRewardDialog = () => setOpenAddRewardDialog(true);
@@ -52,6 +74,15 @@ export default function Rewards() {
 
   // Add Reward
   const handleAddRewardSubmit = () => {
+    if (redeemBy) {
+      try {
+        dateValidation(redeemBy);
+        setError(null); // Reset error if validation passes
+      } catch (error: any) {
+        setError(error.message); // Set error message to state
+        return;
+      }
+    }
     fetch("http://localhost:3000/reward/createReward", {
       method: "POST",
       headers: {
@@ -77,12 +108,21 @@ export default function Rewards() {
         handleCloseAddRewardDialog();
       })
       .catch((error) => {
-        console.error("Error:", error);
+        setError("Failed to add reward: " + error.message); // Set error message
       });
   };
 
   // Update Reward
   const handleUpdateRewardSubmit = () => {
+    if (redeemBy) {
+      try {
+        dateValidation(redeemBy);
+        setError(null); // Reset error if validation passes
+      } catch (error: any) {
+        setError(error.message); // Set error message to state
+        return;
+      }
+    }
     fetch(`http://localhost:3000/reward/updateReward/${id}`, {
       method: "PUT",
       headers: {
@@ -111,7 +151,7 @@ export default function Rewards() {
         handleCloseUpdateRewardDialog();
       })
       .catch((error) => {
-        console.error("Error:", error);
+        setError("Failed to update reward: " + error.message); // Set error message
       });
   };
 
@@ -135,7 +175,7 @@ export default function Rewards() {
         }
       })
       .catch((error) => {
-        console.error("Error:", error);
+        setError("Failed to delete reward: " + error.message); // Set error message
       });
   };
 
@@ -155,7 +195,7 @@ export default function Rewards() {
         setRewards(data.rewards);
       })
       .catch((error) => {
-        console.error("Error:", error);
+        setError("Failed to fetch rewards: " + error.message); // Set error message
       });
   }, [rewards]);
 
@@ -176,7 +216,6 @@ export default function Rewards() {
             Add Reward +
           </Button>
         </div>
-
         {/* Add Reward Dialog */}
         <Dialog open={openAddRewardDialog} onClose={handleCloseAddRewardDialog}>
           <DialogTitle align="center" color="success">
@@ -186,36 +225,50 @@ export default function Rewards() {
             <TextField
               required
               fullWidth
-              variant="standard"
+              variant="filled"
               label="Reward Name"
-              value={rewardName}
+              value={""}
               onChange={(e) => setRewardName(e.target.value)}
             />
             <TextField
               required
               fullWidth
-              variant="standard"
+              variant="filled"
               label="Reward Description"
-              value={rewardDescription}
+              value={""}
               onChange={(e) => setRewardDescription(e.target.value)}
             />
             <TextField
               required
               fullWidth
-              variant="standard"
+              variant="filled"
               label="Reward Points"
               type="number"
-              value={rewardPoints}
+              value={0}
               onChange={(e) => setRewardPoints(Number(e.target.value))}
             />
             <TextField
               fullWidth
-              variant="standard"
+              variant="filled"
               label="Redeem By"
-              value={redeemBy}
+              required
+              type="date"
+              value={new Date().toISOString().split("T")[0]}
               onChange={(e) => setRedeemBy(e.target.value)}
             />
           </DialogContent>
+          {/* Error message */}
+          {error && (
+            <div
+              style={{
+                color: "red",
+                textAlign: "center",
+                marginBottom: "20px",
+              }}
+            >
+              {error}
+            </div>
+          )}
           <DialogActions>
             <Button onClick={handleCloseAddRewardDialog}>Cancel</Button>
             <Button onClick={handleAddRewardSubmit} variant="contained">
@@ -230,13 +283,13 @@ export default function Rewards() {
           onClose={handleCloseUpdateRewardDialog}
         >
           <DialogTitle align="center" color="success">
-            Update Reward
+            Edit Reward
           </DialogTitle>
           <DialogContent>
             <TextField
               required
               fullWidth
-              variant="standard"
+              variant="filled"
               label="Reward Name"
               value={rewardName}
               onChange={(e) => setRewardName(e.target.value)}
@@ -244,7 +297,7 @@ export default function Rewards() {
             <TextField
               required
               fullWidth
-              variant="standard"
+              variant="filled"
               label="Reward Description"
               value={rewardDescription}
               onChange={(e) => setRewardDescription(e.target.value)}
@@ -252,19 +305,37 @@ export default function Rewards() {
             <TextField
               required
               fullWidth
-              variant="standard"
+              variant="filled"
               label="Reward Points"
               type="number"
               value={rewardPoints}
               onChange={(e) => setRewardPoints(Number(e.target.value))}
             />
             <TextField
+              required
               fullWidth
-              variant="standard"
+              variant="filled"
               label="Redeem By"
-              value={redeemBy}
+              type="date"
+              value={
+                redeemBy
+                  ? new Date(redeemBy).toISOString().split("T")[0]
+                  : new Date().toISOString().split("T")[0]
+              }
               onChange={(e) => setRedeemBy(e.target.value)}
             />
+            {/* Error message */}
+            {error && (
+              <div
+                style={{
+                  color: "red",
+                  textAlign: "center",
+                  marginBottom: "20px",
+                }}
+              >
+                {error}
+              </div>
+            )}
           </DialogContent>
           <DialogActions>
             <Button onClick={handleCloseUpdateRewardDialog}>Cancel</Button>
